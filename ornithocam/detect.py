@@ -1,7 +1,16 @@
 import fire
 import urllib
-from model import load_model
-from utils import infer_image, infer_numpy
+from typing import List
+from .model import load_model
+from .utils import infer_image, infer_numpy
+
+
+def record_when_keyword(rankings: List, keywords: List, top_n: int = 20) -> bool:
+    for name, conf in rankings[:top_n]:
+        for k in keywords:
+            if k in name:
+                return True
+    return False
 
 
 def download_image(url):

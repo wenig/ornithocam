@@ -61,3 +61,7 @@ def infer_numpy(model: torch.nn.Module, input_numpy: np.ndarray):
     input_image = numpy_to_image(input_numpy)
     input_batch = preprocess_mobilenet(input_image)
     return infer_tensor(model, input_batch)
+
+
+def get_bird_keywords() -> []:
+    return []
