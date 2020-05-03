@@ -1,9 +1,9 @@
 from threading import Thread
 from queue import Queue
 from typing import List
+import numpy as np
 import cv2
 import time
-import fire
 from .utils import get_bird_keywords
 from .model import load_model
 from .detect import detect_from_frame, record_when_keyword
@@ -36,7 +36,7 @@ def webcam_detect(record: bool = False, if_bird: bool = True):
     model = load_model()
     queue = Queue(maxsize=1)
     out_q = Queue(maxsize=1)
-    detection = Detection(model, queue, out_q, keywords=get_bird_keywords() if if_bird else [""])
+    detection = Detection(model, queue, out_q, keywords=get_bird_keywords() if if_bird else ["mug"])
     detection.start()
 
     cv2.namedWindow("preview")
@@ -48,7 +48,9 @@ def webcam_detect(record: bool = False, if_bird: bool = True):
         rval = False
 
     if record and rval:
-        out = cv2.VideoWriter('recording.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, frame.shape[:-1])
+        fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+        h, w = frame.shape[:-1]
+        out = cv2.VideoWriter('recording.avi', fourcc, 15, (w, h), True)
 
     keyword_present = False
 
@@ -61,10 +63,17 @@ def webcam_detect(record: bool = False, if_bird: bool = True):
             if out_q.full():
                 keyword_present = out_q.get()
             if keyword_present:
-                out.write(frame)
+                write_to_video(out, frame)
         key = cv2.waitKey(20)
         if key == 27: # exit on ESC
             detection.is_detecting = False
             break
     cv2.destroyWindow("preview")
     out.release()
+
+
+def write_to_video(out, frame):
+    h, w = frame.shape[:-1]
+    output = np.zeros((h, w, 3), dtype="uint8")
+    output[0:h, 0:w] = frame
+    out.write(output)
