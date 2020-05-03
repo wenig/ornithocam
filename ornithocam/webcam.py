@@ -36,7 +36,7 @@ def webcam_detect(record: bool = False, if_bird: bool = True):
     model = load_model()
     queue = Queue(maxsize=1)
     out_q = Queue(maxsize=1)
-    detection = Detection(model, queue, out_q, keywords=get_bird_keywords() if if_bird else ["mug"])
+    detection = Detection(model, queue, out_q, keywords=get_bird_keywords() if if_bird else [""])
     detection.start()
 
     cv2.namedWindow("preview")
