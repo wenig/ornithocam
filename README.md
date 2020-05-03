@@ -12,3 +12,8 @@ from ornithocam.webcam import webcam_detect
 
 webcam_detect()
 ```
+
+## Example (from terminal)
+```shell script
+python ornithocam_tool.py webcam --record=True --if_bird=True
+```
