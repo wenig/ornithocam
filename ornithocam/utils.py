@@ -1,7 +1,7 @@
 import torch
-import json
 import numpy as np
 import os
+from typing import List
 from PIL import Image
 from torchvision import transforms
 from torchvision.datasets.imagenet import ImageNet
@@ -63,5 +63,5 @@ def infer_numpy(model: torch.nn.Module, input_numpy: np.ndarray):
     return infer_tensor(model, input_batch)
 
 
-def get_bird_keywords() -> []:
-    return []
+def get_bird_keywords() -> List:
+    return ["magpie", "bird", "vulture"]
